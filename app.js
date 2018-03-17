@@ -2,6 +2,9 @@ console.log("Starting app");
 
 request = require('request');
 yargs = require('yargs');
+geocode = require('./geocode/geocode.js');
+
+
 const argv = yargs.options({
     a: {
         demand: true,
@@ -13,8 +16,18 @@ const argv = yargs.options({
         .help()
         .alias('help','h')
         .argv;
+
+geocode.geocode_address(argv.a,(error,results) =>{
+    if(error)
+        console.log(error);
+    else
+        console.log(JSON.stringify(results,undefined,2));
+
+});
+
+
 //console.log(argv);
-var encoded_address = encodeURIComponent(argv.a);
+/*var encoded_address = encodeURIComponent(argv.a);
 request({
     url: 'https://maps.googleapis.com/maps/api/geocode/json?address='+encoded_address+'&key=%20%20AIzaSyCECABbg_LZZJFD7VDMBmML0jwj1V79nnI',
     json:true
@@ -34,6 +47,6 @@ request({
 }
 
 
-});
+});*/
 
 
