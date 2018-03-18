@@ -3,7 +3,7 @@ console.log("Starting app");
 request = require('request');
 yargs = require('yargs');
 geocode = require('./geocode/geocode.js');
-
+weather = require('./weather/weather.js');
 
 const argv = yargs.options({
     a: {
@@ -20,33 +20,19 @@ const argv = yargs.options({
 geocode.geocode_address(argv.a,(error,results) =>{
     if(error)
         console.log(error);
-    else
-        console.log(JSON.stringify(results,undefined,2));
-
-});
-
-
-//console.log(argv);
-/*var encoded_address = encodeURIComponent(argv.a);
-request({
-    url: 'https://maps.googleapis.com/maps/api/geocode/json?address='+encoded_address+'&key=%20%20AIzaSyCECABbg_LZZJFD7VDMBmML0jwj1V79nnI',
-    json:true
-},(error,response,body) => {
-   // console.log(JSON.stringify(body,undefined,2));
-    if (error){
-        console.log("Unable to connect to the google servers. ");
-    }else if(body.status === 'ZERO_RESULTS'){
-        console.log('Address not found. ');
-
-    }else if(body.status === 'OK'){
-        console.log("ADRRESS:  ",body.results[0].formatted_address);
-        console.log("LONGITUDE:  ",body.results[0].geometry.location.lng);
-        console.log("LATITUDE:   ",body.results[0].geometry.location.lat);
-    }else{
-    console.log("Some other error suspected. ");
+    else{
+        //console.log(JSON.stringify(results,undefined,2));
+        weather.get_weather(results.lat,results.lng,(error,result)=>{
+        if(error){
+            console.log(error);
+        }
+        else{
+            //console.log(JSON.stringify(result,undefined,2));
+            console.log("Current temperature in: ",results.address," is: ",result.temp," Degree Fahrenheit ");
+        }
+})
 }
+})
 
 
-});*/
-
-
+//api key for forecast:  82521bc1a34149c4dce86fa9ae8ad30f
